@@ -1,0 +1,78 @@
+I = [];
+figure(1);
+for i=1:3
+    importImage = strcat(int2str(i),'.pgm');
+    eval('importedImage=imread(importImage);');
+    subplot(ceil(sqrt(3)),ceil(sqrt(3)),i)
+    [m,n] = size(importedImage);
+    imshow(importedImage)
+    temp = reshape(importedImage',m*n,1);
+    I= [I temp];
+end
+ meanFace = mean(I,2);
+ imageSize = size(I,2);
+ image = reshape(meanFace',m,n);
+ image = image';
+ figure,imshow(image);
+
+ I1 = []
+ for i=1:3
+     temp = double(I(:,i));
+     I1(:,i)=(temp-meanFace);
+ end
+ for i=1:3
+     subplot(ceil(sqrt(3)),ceil(sqrt(3)),i);
+     image1 = reshape(I1(:,i),n,m);
+     image1=image1';
+     [m n] = size(image1);
+     imshow(image1);
+ end
+ mat = []
+ for i=1:3
+     doub = double(I1(:,i))
+     mat = [mat,doub]
+ end
+matTranspose = mat';
+covMat = matTranspose * matTranspose';
+[v, lam] = eig(covMat);
+disp("The eigen values are");
+disp(lam);
+disp("The eigen vectors are");
+disp(v);
+EigVec = [];
+for i=1:size(v,2)
+    if(lam(i,i) > 1)
+        EigVec = [EigVec v(:,i)];
+    end
+end
+eigenFace = mat * EigVec;
+disp("Size of mat is: ");
+disp(size(mat));
+disp("Size of mat is: ");
+disp(size(eigenFace));
+
+%Recognition
+
+inputImage = imread('5.pgm');
+[m n] = size(inputImage);
+inputImageVector = reshape(inputImage',m*n,1);
+meanInputFace = double(inputImageVector) - meanFace;
+projectImage = [];
+for i = 1 : size(eigenFace,2)
+    temp = eigenFace' * mat(:,i);
+    projectImage = [projectImage temp];
+end
+projectInputImage = eigenFace' * meanInputFace;
+euclideanDist = [];
+for i=1:size(eigenFace,2)
+    temp = (norm(projectInputImage-projectImage(:,i)))^2
+    euclideanDist = [euclideanDist temp]
+end
+[euclideanDist recognized_image] = min(euclideanDist);
+recognized_img = strcat(int2str(recognized_image),'.pgm');
+disp(recognized_img)
+    
+
+
+
+
