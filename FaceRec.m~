@@ -1,7 +1,7 @@
 I = [];
 figure(1);
 for i=1:3
-    importImage = strcat('Dataset/',int2str(i),'.pgm');
+    importImage = strcat('int2str(i),'.pgm');
     eval('importedImage=imread(importImage);');
     subplot(ceil(sqrt(3)),ceil(sqrt(3)),i)
     [m,n] = size(importedImage);
@@ -53,7 +53,7 @@ disp(size(eigenFace));
 
 %Recognition
 
-inputImage = imread('Dataset/5.pgm');
+inputImage = imread('5.pgm');
 [m n] = size(inputImage);
 inputImageVector = reshape(inputImage',m*n,1);
 meanInputFace = double(inputImageVector) - meanFace;
