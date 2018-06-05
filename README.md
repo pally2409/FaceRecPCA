@@ -14,9 +14,6 @@ We test it on the following image.
 ![picture](Screenshots/3.png)
 
 This gives us
-``` 
-2.pgm
-
-``` 
+```2.pgm``` 
 
 All images are taken from the Yale dataset, namely yalefaces.
